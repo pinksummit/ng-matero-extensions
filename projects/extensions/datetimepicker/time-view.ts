@@ -15,7 +15,6 @@ import {
   OnDestroy,
   Output,
   SimpleChanges,
-  viewChild,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
@@ -276,6 +275,9 @@ export class MtxTimeView<D> implements OnChanges, OnDestroy {
   /** Whether the time input should be auto-focused after view init. */
   @Input({ transform: booleanAttribute }) autoFocus = true;
 
+  /** Includes the option to enter seconds. */
+  @Input() withSeconds: boolean = false;
+
   @ViewChild('hourInput', { read: ElementRef<HTMLInputElement> })
   protected hourInputElement: ElementRef<HTMLInputElement> | undefined;
 
@@ -295,6 +297,12 @@ export class MtxTimeView<D> implements OnChanges, OnDestroy {
     this._changeDetectorRef.detectChanges();
   }
   protected _minuteInputDirective: MtxTimeInput | undefined;
+
+  @ViewChild('secondInput', { read: ElementRef<HTMLInputElement> })
+  protected secondInputElement: ElementRef<HTMLInputElement> | undefined;
+
+  @ViewChild('secondInput', { read: MtxTimeInput })
+  protected secondInputDirective: MtxTimeInput | undefined;
 
   datetimepickerIntlChangesSubscription: SubscriptionLike;
 
@@ -363,7 +371,11 @@ export class MtxTimeView<D> implements OnChanges, OnDestroy {
   }
 
   get isMinuteView() {
-    return this._clockView === 'hour';
+    return this._clockView === 'minute';
+  }
+
+  get isSecondView() {
+    return this._clockView === 'second';
   }
 
   get hour() {
@@ -390,6 +402,14 @@ export class MtxTimeView<D> implements OnChanges, OnDestroy {
   get minute() {
     if (this.activeDate) {
       return this.prefixWithZero(this._adapter.getMinute(this.activeDate));
+    }
+
+    return '00';
+  }
+
+  get second() {
+    if (this.activeDate) {
+      return this.prefixWithZero(this._adapter.getSecond(this.activeDate));
     }
 
     return '00';
@@ -436,13 +456,17 @@ export class MtxTimeView<D> implements OnChanges, OnDestroy {
         this.selected =
           this._clockView === 'hour'
             ? this._adapter.addCalendarHours(this._activeDate, 1)
-            : this._adapter.addCalendarMinutes(this._activeDate, this.interval);
+            : this._clockView === 'minute'
+              ? this._adapter.addCalendarMinutes(this._activeDate, this.interval)
+              : this._adapter.addCalendarSeconds(this._activeDate, this.interval);
         break;
       case DOWN_ARROW:
         this.selected =
           this._clockView === 'hour'
             ? this._adapter.addCalendarHours(this._activeDate, -1)
-            : this._adapter.addCalendarMinutes(this._activeDate, -this.interval);
+            : this._clockView === 'minute'
+              ? this._adapter.addCalendarMinutes(this._activeDate, -this.interval)
+              : this._adapter.addCalendarSeconds(this._activeDate, -this.interval);
         break;
       case ENTER:
       case SPACE:
@@ -469,9 +493,17 @@ export class MtxTimeView<D> implements OnChanges, OnDestroy {
 
   _focusInputElement() {
     if (this.clockView === 'hour') {
-      this.hourInputElement?.nativeElement.focus();
-    } else {
-      this.minuteInputElement?.nativeElement.focus();
+      if (this.hourInputElement) {
+        (this.hourInputElement.nativeElement as HTMLInputElement).focus();
+      }
+    } else if (this.clockView === 'minute') {
+      if (this.minuteInputElement) {
+        (this.minuteInputElement.nativeElement as HTMLInputElement).focus();
+      }
+    } else if (this.withSeconds && this.clockView === 'second') {
+      if (this.secondInputElement) {
+        (this.secondInputElement.nativeElement as HTMLInputElement).focus();
+      }
     }
   }
 
@@ -483,7 +515,8 @@ export class MtxTimeView<D> implements OnChanges, OnDestroy {
         this._adapter.getMonth(this.activeDate),
         this._adapter.getDate(this.activeDate),
         this._updateHourForAmPm(hour),
-        this._adapter.getMinute(this.activeDate)
+        this._adapter.getMinute(this.activeDate),
+        this._adapter.getSecond(this.activeDate)
       );
 
       this._activeDate = this._adapter.clampDate(newValue, this.minDate, this.maxDate);
@@ -533,8 +566,9 @@ export class MtxTimeView<D> implements OnChanges, OnDestroy {
         this._adapter.getYear(this.activeDate),
         this._adapter.getMonth(this.activeDate),
         this._adapter.getDate(this.activeDate),
-        this._adapter.getHour(this.activeDate),
-        minute
+        this._adapter.getHour(this._activeDate),
+        minute,
+        this._adapter.getSecond(this.activeDate)
       );
 
       this._activeDate = this._adapter.clampDate(newValue, this.minDate, this.maxDate);
@@ -554,6 +588,30 @@ export class MtxTimeView<D> implements OnChanges, OnDestroy {
     }
   }
 
+  _handleSecondInputChange(value: NumberInput) {
+    const second = coerceNumberProperty(value);
+    if (second || second === 0) {
+      const newValue = this._adapter.createDatetime(
+        this._adapter.getYear(this.activeDate),
+        this._adapter.getMonth(this.activeDate),
+        this._adapter.getDate(this.activeDate),
+        this._adapter.getHour(this._activeDate),
+        this._adapter.getMinute(this.activeDate),
+        second
+      );
+      this._activeDate = this._adapter.clampDate(newValue, this.minDate, this.maxDate);
+      this.activeDateChange.emit(this.activeDate);
+
+      // If previously we did set [mtxValue]="40" and the input changed to 30, and the clamping
+      // will make it "40" again then the secondInputDirective will not have been updated
+      // since "40" === "40" same reference so no change detected by directly setting it within
+      // this handler, we handle this usecase
+      if (this.secondInputDirective) {
+        this.secondInputDirective.timeValue = this.second;
+      }
+    }
+  }
+
   _handleFocus(clockView: MtxClockView) {
     this.clockView = clockView;
     this.clockViewChange.emit(clockView);
@@ -562,6 +620,9 @@ export class MtxTimeView<D> implements OnChanges, OnDestroy {
   _dialTimeSelected(date: D): void {
     if (this.clockView === 'hour') {
       this.clockView = 'minute';
+      this._activeDate = date;
+    } else if (this.withSeconds && this.clockView === 'minute') {
+      this.clockView = 'second';
       this._activeDate = date;
     }
     if (!this._adapter.sameDatetime(date, this.selected) || !this.preventSameDateTimeSelection) {
@@ -573,6 +634,8 @@ export class MtxTimeView<D> implements OnChanges, OnDestroy {
     if (this.timeInput) {
       if (this.clockView === 'hour') {
         this.clockView = 'minute';
+      } else if (this.withSeconds && this.clockView === 'minute') {
+        this.clockView = 'second';
       }
       this._activeDate = this.selected = date;
     } else {

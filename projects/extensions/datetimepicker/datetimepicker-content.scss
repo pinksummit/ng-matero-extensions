@@ -6,13 +6,37 @@
 $calendar-padding: 8px;
 $non-touch-calendar-cell-size: 40px;
 $non-touch-calendar-portrait-width: $non-touch-calendar-cell-size * 7 + $calendar-padding * 2;
+$non-touch-calendar-portrait-with-seconds-width: calc(
+  #{$non-touch-calendar-portrait-width} + 50px
+);
+
 $non-touch-calendar-portrait-height: 424px;
+
 $non-touch-calendar-landscape-width: 440px;
+$non-touch-calendar-landscape-with-seconds-width: calc(
+  #{$non-touch-calendar-landscape-width} + 60px
+);
 $non-touch-calendar-landscape-height: 328px;
-$non-touch-calendar-with-time-input-portrait-height: 442px;
+
+$non-touch-calendar-landscape-with-seconds-height: calc(
+  #{$non-touch-calendar-landscape-height} + 20px
+);
+$non-touch-calendar-with-time-input-portrait-height: 490px;
+$non-touch-calendar-with-time-input-portrait-with-seconds-height: calc(
+  #{$non-touch-calendar-with-time-input-portrait-height} + 50px
+);
+$non-touch-calendar-with-time-input-landscape-height: 404px;
+$non-touch-calendar-with-time-input-landscape-with-seconds-height: calc(
+  #{$non-touch-calendar-with-time-input-landscape-height} + 50px
+);
 $non-touch-calendar-with-time-input-actions-portrait-height: 494px;
-$non-touch-calendar-with-time-input-landscape-height: 356px;
+$non-touch-calendar-with-time-input-actions-portrait-with-seconds-height: calc(
+  #{$non-touch-calendar-with-time-input-actions-portrait-height} + 50px
+);
 $non-touch-calendar-with-time-input-actions-landscape-height: 416px;
+$non-touch-calendar-with-time-input-actions-landscape-with-seconds-height: calc(
+  #{$non-touch-calendar-with-time-input-actions-landscape-height} + 50px
+);
 
 // Ideally the calendar would have a constant aspect ratio, no matter its size, and we would base
 // these measurements off the aspect ratio. Unfortunately, the aspect ratio does change a little as
@@ -75,6 +99,11 @@ $touch-max-height: 850px;
     &.mtx-calendar-with-time-input {
       height: $non-touch-calendar-with-time-input-actions-landscape-height;
     }
+
+    &.mtx-calendar-with-time-with-seconds-input {
+      width: $non-touch-calendar-landscape-with-seconds-width;
+      height: $non-touch-calendar-with-time-input-landscape-with-seconds-height;
+    }
   }
 
   .mtx-datetimepicker-content-container-with-actions .mtx-calendar.mtx-calendar-with-time-input {
@@ -103,6 +132,11 @@ $touch-max-height: 850px;
 
     &.mtx-calendar-with-time-input {
       height: $non-touch-calendar-with-time-input-actions-portrait-height;
+    }
+
+    &.mtx-calendar-with-time-with-seconds-input {
+      width: $non-touch-calendar-portrait-with-seconds-width;
+      height: $non-touch-calendar-with-time-input-portrait-with-seconds-height;
     }
   }
 

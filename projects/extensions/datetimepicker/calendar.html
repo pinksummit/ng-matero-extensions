@@ -40,6 +40,13 @@
                 [class.active]="_clockView === 'minute'"
                 [attr.aria-label]="_minuteButtonLabel"
                 (click)="_minutesClicked()">{{ _minutesButtonText }}</button>
+              @if (withSeconds) {
+                <span class="mtx-calendar-header-hour-minute-separator">:</span>
+                <button mat-button type="button"  class="mtx-calendar-header-seconds"
+                  [class.active]="_clockView === 'second'"
+                  [attr.aria-label]="_secondButtonLabel"
+                  (click)="_secondsClicked()">{{ _secondsButtonText }}</button>
+              }
             </span>
             @if (twelvehour) {
               <span class="mtx-calendar-header-ampm-container">
@@ -140,6 +147,7 @@
           [actionsPortal]="actionsPortal"
           [autoFocus]="timeInputAutoFocus"
           [timeInput]="timeInput"
+          [withSeconds]="withSeconds"
           [preventSameDateTimeSelection]="preventSameDateTimeSelection">
         </mtx-time-view>
       }

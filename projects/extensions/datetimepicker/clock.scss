@@ -73,7 +73,8 @@ $_tokens: tokens-mtx-datetimepicker.$prefix, tokens-mtx-datetimepicker.get-token
 }
 
 .mtx-clock-hours,
-.mtx-clock-minutes {
+.mtx-clock-minutes,
+.mtx-clock-seconds {
   position: absolute;
   top: 0;
   left: 0;
@@ -91,8 +92,9 @@ $_tokens: tokens-mtx-datetimepicker.$prefix, tokens-mtx-datetimepicker.get-token
   }
 }
 
-.mtx-clock-minutes {
-  transform: scale(.8);
+.mtx-clock-minutes,
+.mtx-clock-seconds {
+  transform: scale(0.8);
 }
 
 .mtx-clock-cell {

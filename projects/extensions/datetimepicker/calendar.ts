@@ -55,6 +55,7 @@ import { MtxYearView } from './year-view';
   host: {
     'class': 'mtx-calendar',
     '[class.mtx-calendar-with-time-input]': 'timeInput',
+    '[class.mtx-calendar-with-time-with-seconds-input]': 'timeInput && withSeconds',
   },
   exportAs: 'mtxCalendar',
   encapsulation: ViewEncapsulation.None,
@@ -103,6 +104,9 @@ export class MtxCalendar<D> implements AfterViewChecked, AfterContentInit, OnDes
 
   /** Input for action buttons. */
   @Input() actionsPortal: TemplatePortal | null = null;
+
+  /** Includes the option to enter seconds. */
+  @Input() withSeconds = false;
 
   /** Emits when the currently selected date changes. */
   @Output() selectedChange: EventEmitter<D> = new EventEmitter<D>();
@@ -170,6 +174,12 @@ export class MtxCalendar<D> implements AfterViewChecked, AfterContentInit, OnDes
     this._type = value || 'date';
     if (this.type === 'year') {
       this.multiYearSelector = true;
+    }
+    if (this.withSeconds && this._type !== 'datetime' && this._type !== 'time') {
+      console.warn(
+        "The option 'withSeconds' is not supported for types other than datetime and time"
+      );
+      this.withSeconds = false;
     }
   }
   private _type: MtxDatetimepickerType = 'date';
@@ -322,6 +332,14 @@ export class MtxCalendar<D> implements AfterViewChecked, AfterContentInit, OnDes
     return this._intl.switchToClockMinuteViewLabel;
   }
 
+  get _secondsButtonText(): string {
+    return this._2digit(this._adapter.getSecond(this._activeDate));
+  }
+
+  get _secondButtonLabel(): string {
+    return this._intl.switchToClockSecondViewLabel;
+  }
+
   get _prevButtonLabel(): string {
     switch (this._currentView) {
       case 'month':
@@ -431,6 +449,7 @@ export class MtxCalendar<D> implements AfterViewChecked, AfterContentInit, OnDes
           0,
           1,
           0,
+          0,
           0
         );
         this.selectedChange.emit(normalizedDate);
@@ -447,6 +466,20 @@ export class MtxCalendar<D> implements AfterViewChecked, AfterContentInit, OnDes
       this.selectedChange.emit(date);
     }
   }
+
+  // _dialTimeSelected(date: D): void {
+  //   if (this._clockView !== 'minute' && this._clockView !== 'second') {
+  //     this._activeDate = this._updateDate(date);
+  //     this._clockView = 'minute';
+  //   } else if (this.withSeconds && this._clockView == 'minute') {
+  //     this._activeDate = this._updateDate(date);
+  //     this._clockView = 'second';
+  //   } else {
+  //     if (!this._adapter.sameDatetime(date, this.selected) || !this.preventSameDateTimeSelection) {
+  //       this.selectedChange.emit(date);
+  //     }
+  //   }
+  // }
 
   _onActiveDateChange(date: D) {
     this._activeDate = date;
@@ -494,7 +527,8 @@ export class MtxCalendar<D> implements AfterViewChecked, AfterContentInit, OnDes
         this._adapter.getMonth(this._activeDate),
         this._adapter.getDate(this._activeDate),
         newHourValue,
-        this._adapter.getMinute(this._activeDate)
+        this._adapter.getMinute(this._activeDate),
+        this.withSeconds ? this._adapter.getSecond(this._activeDate) : 0
       ),
       this.minDate,
       this.maxDate
@@ -530,6 +564,11 @@ export class MtxCalendar<D> implements AfterViewChecked, AfterContentInit, OnDes
   _minutesClicked(): void {
     this.currentView = 'clock';
     this._clockView = 'minute';
+  }
+
+  _secondsClicked(): void {
+    this.currentView = 'clock';
+    this._clockView = 'second';
   }
 
   /** Handles user clicks on the previous button. */
@@ -581,6 +620,219 @@ export class MtxCalendar<D> implements AfterViewChecked, AfterContentInit, OnDes
     // Otherwise we are in 'multi-year' view.
     return isSameMultiYearView(this._adapter, date1, date2, this.minDate, this.maxDate);
   }
+
+  /** Handles keydown events on the calendar body when calendar is in month view. */
+  // private _handleCalendarBodyKeydownInMonthView(event: KeyboardEvent): void {
+  //   switch (event.keyCode) {
+  //     case LEFT_ARROW:
+  //       this._activeDate = this._adapter.addCalendarDays(this._activeDate, -1);
+  //       break;
+  //     case RIGHT_ARROW:
+  //       this._activeDate = this._adapter.addCalendarDays(this._activeDate, 1);
+  //       break;
+  //     case UP_ARROW:
+  //       this._activeDate = this._adapter.addCalendarDays(this._activeDate, -7);
+  //       break;
+  //     case DOWN_ARROW:
+  //       this._activeDate = this._adapter.addCalendarDays(this._activeDate, 7);
+  //       break;
+  //     case HOME:
+  //       this._activeDate = this._adapter.addCalendarDays(
+  //         this._activeDate,
+  //         1 - this._adapter.getDate(this._activeDate)
+  //       );
+  //       break;
+  //     case END:
+  //       this._activeDate = this._adapter.addCalendarDays(
+  //         this._activeDate,
+  //         this._adapter.getNumDaysInMonth(this._activeDate) -
+  //           this._adapter.getDate(this._activeDate)
+  //       );
+  //       break;
+  //     case PAGE_UP:
+  //       this._activeDate = event.altKey
+  //         ? this._adapter.addCalendarYears(this._activeDate, -1)
+  //         : this._adapter.addCalendarMonths(this._activeDate, -1);
+  //       break;
+  //     case PAGE_DOWN:
+  //       this._activeDate = event.altKey
+  //         ? this._adapter.addCalendarYears(this._activeDate, 1)
+  //         : this._adapter.addCalendarMonths(this._activeDate, 1);
+  //       break;
+  //     case ENTER:
+  //       if (this._dateFilterForViews(this._activeDate)) {
+  //         this._dateSelected(this._activeDate);
+  //         // Prevent unexpected default actions such as form submission.
+  //         event.preventDefault();
+  //       }
+  //       return;
+  //     default:
+  //       // Don't prevent default or focus active cell on keys that we don't explicitly handle.
+  //       return;
+  //   }
+
+  //   // Prevent unexpected default actions such as form submission.
+  //   event.preventDefault();
+  // }
+
+  /** Handles keydown events on the calendar body when calendar is in year view. */
+  // private _handleCalendarBodyKeydownInYearView(event: KeyboardEvent): void {
+  //   switch (event.keyCode) {
+  //     case LEFT_ARROW:
+  //       this._activeDate = this._adapter.addCalendarMonths(this._activeDate, -1);
+  //       break;
+  //     case RIGHT_ARROW:
+  //       this._activeDate = this._adapter.addCalendarMonths(this._activeDate, 1);
+  //       break;
+  //     case UP_ARROW:
+  //       this._activeDate = this._prevMonthInSameCol(this._activeDate);
+  //       break;
+  //     case DOWN_ARROW:
+  //       this._activeDate = this._nextMonthInSameCol(this._activeDate);
+  //       break;
+  //     case HOME:
+  //       this._activeDate = this._adapter.addCalendarMonths(
+  //         this._activeDate,
+  //         -this._adapter.getMonth(this._activeDate)
+  //       );
+  //       break;
+  //     case END:
+  //       this._activeDate = this._adapter.addCalendarMonths(
+  //         this._activeDate,
+  //         11 - this._adapter.getMonth(this._activeDate)
+  //       );
+  //       break;
+  //     case PAGE_UP:
+  //       this._activeDate = this._adapter.addCalendarYears(
+  //         this._activeDate,
+  //         event.altKey ? -10 : -1
+  //       );
+  //       break;
+  //     case PAGE_DOWN:
+  //       this._activeDate = this._adapter.addCalendarYears(this._activeDate, event.altKey ? 10 : 1);
+  //       break;
+  //     case ENTER:
+  //       this._monthSelected(this._activeDate);
+  //       break;
+  //     default:
+  //       // Don't prevent default or focus active cell on keys that we don't explicitly handle.
+  //       return;
+  //   }
+
+  //   // Prevent unexpected default actions such as form submission.
+  //   event.preventDefault();
+  // }
+
+  // /** Handles keydown events on the calendar body when calendar is in multi-year view. */
+  // private _handleCalendarBodyKeydownInMultiYearView(event: KeyboardEvent): void {
+  //   switch (event.keyCode) {
+  //     case LEFT_ARROW:
+  //       this._activeDate = this._adapter.addCalendarYears(this._activeDate, -1);
+  //       break;
+  //     case RIGHT_ARROW:
+  //       this._activeDate = this._adapter.addCalendarYears(this._activeDate, 1);
+  //       break;
+  //     case UP_ARROW:
+  //       this._activeDate = this._adapter.addCalendarYears(this._activeDate, -yearsPerRow);
+  //       break;
+  //     case DOWN_ARROW:
+  //       this._activeDate = this._adapter.addCalendarYears(this._activeDate, yearsPerRow);
+  //       break;
+  //     case HOME:
+  //       this._activeDate = this._adapter.addCalendarYears(
+  //         this._activeDate,
+  //         -getActiveOffset(this._adapter, this._activeDate, this.minDate, this.maxDate)
+  //       );
+  //       break;
+  //     case END:
+  //       this._activeDate = this._adapter.addCalendarYears(
+  //         this._activeDate,
+  //         yearsPerPage -
+  //           getActiveOffset(this._adapter, this._activeDate, this.minDate, this.maxDate) -
+  //           1
+  //       );
+  //       break;
+  //     case PAGE_UP:
+  //       this._activeDate = this._adapter.addCalendarYears(
+  //         this._activeDate,
+  //         event.altKey ? -yearsPerPage * 10 : -yearsPerPage
+  //       );
+  //       break;
+  //     case PAGE_DOWN:
+  //       this._activeDate = this._adapter.addCalendarYears(
+  //         this._activeDate,
+  //         event.altKey ? yearsPerPage * 10 : yearsPerPage
+  //       );
+  //       break;
+  //     case ENTER:
+  //       this._yearSelected(this._activeDate);
+  //       break;
+  //     default:
+  //       // Don't prevent default or focus active cell on keys that we don't explicitly handle.
+  //       return;
+  //   }
+  // }
+
+  // /** Handles keydown events on the calendar body when calendar is in month view. */
+  // private _handleCalendarBodyKeydownInClockView(event: KeyboardEvent): void {
+  //   switch (event.keyCode) {
+  //     case UP_ARROW:
+  //       this._activeDate =
+  //         this._clockView === 'hour'
+  //           ? this._adapter.addCalendarHours(this._activeDate, 1)
+  //           : this._clockView === 'second'
+  //           ? this._adapter.addCalendarSeconds(this._activeDate, this.timeInterval)
+  //           : this._adapter.addCalendarMinutes(this._activeDate, this.timeInterval);
+  //       break;
+  //     case DOWN_ARROW:
+  //       this._activeDate =
+  //         this._clockView === 'hour'
+  //           ? this._adapter.addCalendarHours(this._activeDate, -1)
+  //           : this._clockView === 'second'
+  //           ? this._adapter.addCalendarSeconds(this._activeDate, -this.timeInterval)
+  //           : this._adapter.addCalendarMinutes(this._activeDate, -this.timeInterval);
+  //       break;
+  //     case ENTER:
+  //       if (!this.timeInput) {
+  //         this._dialTimeSelected(this._activeDate);
+  //       }
+  //       return;
+  //     default:
+  //       // Don't prevent default or focus active cell on keys that we don't explicitly handle.
+  //       return;
+  //   }
+
+  //   // Prevent unexpected default actions such as form submission.
+  //   event.preventDefault();
+  // }
+
+  /**
+   * Determine the date for the month that comes before the given month in the same column in the
+   * calendar table.
+   */
+  private _prevMonthInSameCol(date: D): D {
+    // Determine how many months to jump forward given that there are 2 empty slots at the beginning
+    // of each year.
+    const increment =
+      this._adapter.getMonth(date) <= 4 ? -5 : this._adapter.getMonth(date) >= 7 ? -7 : -12;
+    return this._adapter.addCalendarMonths(date, increment);
+  }
+
+  /**
+   * Determine the date for the month that comes after the given month in the same column in the
+   * calendar table.
+   */
+  private _nextMonthInSameCol(date: D): D {
+    // Determine how many months to jump forward given that there are 2 empty slots at the beginning
+    // of each year.
+    const increment =
+      this._adapter.getMonth(date) <= 4 ? 7 : this._adapter.getMonth(date) >= 7 ? 5 : 12;
+    return this._adapter.addCalendarMonths(date, increment);
+  }
+
+  // private calendarState(direction: string): void {
+  //   this._calendarState = direction;
+  // }
 
   private _2digit(n: number) {
     return ('00' + n).slice(-2);

@@ -6,6 +6,7 @@
 
 <mat-checkbox [(ngModel)]="timeInputAutoFocus">timeInputAutoFocus</mat-checkbox>
 <mat-checkbox [(ngModel)]="showWeekNumbers">showWeekNumbers</mat-checkbox>
+<mat-checkbox [(ngModel)]="withSeconds">withSeconds</mat-checkbox>
 
 <form [formGroup]="group">
   <mat-form-field [color]="themeColor">
@@ -16,6 +17,7 @@
       startView="month"
       [timeInterval]="5"
       [showWeekNumbers]="showWeekNumbers"
+      [withSeconds]="withSeconds"
     />
     <input
       [mtxDatetimepicker]="datetimePicker"
@@ -46,6 +48,7 @@
       [timeInterval]="5"
       [timeInput]="true"
       [timeInputAutoFocus]="timeInputAutoFocus"
+      [withSeconds]="withSeconds"
     />
     <input
       [mtxDatetimepicker]="datetimePickerManual"
@@ -75,6 +78,7 @@
       [multiYearSelector]="true"
       startView="month"
       [timeInterval]="5"
+      [withSeconds]="withSeconds"
     />
     <input
       [mtxDatetimepicker]="datetimeYearPicker"
@@ -98,9 +102,9 @@
 
   <mat-form-field [color]="themeColor">
     <mat-label>Time</mat-label>
-    <mtx-datetimepicker-toggle [for]="timePicker" matSuffix />
-    <mtx-datetimepicker #timePicker [timeInterval]="5" type="time" />
-    <input [mtxDatetimepicker]="timePicker" formControlName="time" matInput required />
+    <mtx-datetimepicker-toggle [for]="timePicker" matSuffix></mtx-datetimepicker-toggle>
+    <mtx-datetimepicker #timePicker [timeInterval]="5" type="time" [withSeconds]="withSeconds"></mtx-datetimepicker>
+    <input [mtxDatetimepicker]="timePicker" formControlName="time" matInput required>
     @if (group.get('time')?.errors?.required) {
       <mat-error>required</mat-error>
     }
@@ -115,6 +119,7 @@
       [twelvehour]="true"
       [timeInput]="true"
       [timeInputAutoFocus]="timeInputAutoFocus"
+      [withSeconds]="withSeconds"
       type="time"
     />
     <input [mtxDatetimepicker]="timeAMPMPicker2" formControlName="timeAMPM2" matInput required />
@@ -143,6 +148,7 @@
       [timeInput]="true"
       [timeInputAutoFocus]="timeInputAutoFocus"
       [twelvehour]="true"
+      [withSeconds]="withSeconds"
     />
     <input
       [mtxDatetimepicker]="timeAMPMPickerManual"
@@ -167,7 +173,7 @@
   <mat-form-field [color]="themeColor">
     <mat-label>Date</mat-label>
     <mtx-datetimepicker-toggle [for]="datePicker" matSuffix />
-    <mtx-datetimepicker #datePicker type="date" />
+    <mtx-datetimepicker #datePicker type="date" [withSeconds]="withSeconds"/>
     <input [mtxDatetimepicker]="datePicker" formControlName="date" matInput required />
     @if (group.get('date')?.errors?.required) {
       <mat-error>required</mat-error>
@@ -177,7 +183,7 @@
   <mat-form-field [color]="themeColor">
     <mat-label>Month</mat-label>
     <mtx-datetimepicker-toggle [for]="monthPicker" matSuffix />
-    <mtx-datetimepicker #monthPicker mode="portrait" type="month" />
+    <mtx-datetimepicker #monthPicker mode="portrait" type="month" [withSeconds]="withSeconds"/>
     <input [mtxDatetimepicker]="monthPicker" formControlName="month" matInput required />
     @if (group.get('month')?.errors?.required) {
       <mat-error>required</mat-error>
@@ -187,7 +193,7 @@
   <mat-form-field [color]="themeColor">
     <mat-label>Year</mat-label>
     <mtx-datetimepicker-toggle [for]="yearPicker" matSuffix />
-    <mtx-datetimepicker #yearPicker type="year" />
+    <mtx-datetimepicker #yearPicker type="year" [withSeconds]="withSeconds"/>
     <input [mtxDatetimepicker]="yearPicker" formControlName="year" matInput required />
     @if (group.get('year')?.errors?.required) {
       <mat-error>required</mat-error>
@@ -205,7 +211,7 @@
       required
     />
     <mtx-datetimepicker-toggle [for]="minTestPicker" matSuffix />
-    <mtx-datetimepicker #minTestPicker mode="landscape" [timeInterval]="5" />
+    <mtx-datetimepicker #minTestPicker mode="landscape" [timeInterval]="5" [withSeconds]="withSeconds"/>
     @if (group.get('mintest')?.errors?.required) {
       <mat-error>required</mat-error>
     }
@@ -227,7 +233,7 @@
       required
     />
     <mtx-datetimepicker-toggle [for]="filterTestPicker" matSuffix />
-    <mtx-datetimepicker #filterTestPicker mode="landscape" [timeInterval]="5" />
+    <mtx-datetimepicker #filterTestPicker mode="landscape" [timeInterval]="5" [withSeconds]="withSeconds" />
     @if (group.get('filtertest')?.errors?.required) {
       <mat-error>required</mat-error>
     }
@@ -246,6 +252,7 @@
       [timeInterval]="5"
       [touchUi]="true"
       [showWeekNumbers]="showWeekNumbers"
+      [withSeconds]="withSeconds"
     />
     @if (group.get('touch')?.errors?.required) {
       <mat-error>required</mat-error>
@@ -260,6 +267,7 @@
       startView="month"
       [timeInterval]="5"
       [calendarHeaderComponent]="customHeader"
+      [withSeconds]="withSeconds"
     />
     <input
       [mtxDatetimepicker]="datetimePickerCustomHeader"
@@ -289,6 +297,7 @@
       [timeInput]="true"
       [timeInputAutoFocus]="timeInputAutoFocus"
       [showWeekNumbers]="showWeekNumbers"
+      [withSeconds]="withSeconds"
     >
       <mtx-datetimepicker-actions>
         <button mat-button mtxDatetimepickerClear>Clear</button>
@@ -315,11 +324,11 @@
 <h2>Calendar Inline</h2>
 
 <mat-card class="demo-inline-card">
-  <mtx-calendar [(selected)]="selectedDate" type="date" startView="month"></mtx-calendar>
+  <mtx-calendar [(selected)]="selectedDate" type="date" startView="month" [withSeconds]="withSeconds"></mtx-calendar>
 </mat-card>
 <p>Selected date: {{ selectedDate }}</p>
 
 <mat-card class="demo-inline-card">
-  <mtx-calendar [(selected)]="selectedTime" type="time" startView="clock"></mtx-calendar>
+  <mtx-calendar [(selected)]="selectedTime" type="time" startView="clock" [withSeconds]="withSeconds"></mtx-calendar>
 </mat-card>
 <p>Selected time: {{ selectedTime }}</p>

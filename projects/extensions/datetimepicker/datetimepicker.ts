@@ -112,6 +112,7 @@ export interface MtxDatetimepickerDefaultOptions {
   touchUi?: boolean;
   panelClass?: string | string[];
   calendarHeaderComponent?: ComponentType<any>;
+  withSeconds?: boolean;
 }
 
 /** Injection token that can be used to specify default datetimepicker options. */
@@ -327,6 +328,9 @@ export class MtxDatetimepicker<D> implements OnDestroy {
   @Input()
   calendarHeaderComponent?: ComponentType<any> = this._defaultOptions?.calendarHeaderComponent;
 
+  /** Includes the option to enter seconds. */
+  @Input() withSeconds: boolean = false;
+
   /**
    * Emits new selected date when selected date changes.
    * @deprecated Switch to the `dateChange` and `dateInput` binding on the input element.
@@ -434,6 +438,12 @@ export class MtxDatetimepicker<D> implements OnDestroy {
   }
   set type(value: MtxDatetimepickerType) {
     this._type = value || 'datetime';
+    if (this.withSeconds && this._type !== 'datetime' && this._type !== 'time') {
+      console.warn(
+        "The option 'withSeconds' is not supported for types other than datetime and time"
+      );
+      this.withSeconds = false;
+    }
   }
   private _type: MtxDatetimepickerType = this._defaultOptions?.type ?? 'datetime';
 
@@ -525,6 +535,8 @@ export class MtxDatetimepicker<D> implements OnDestroy {
       if (!this._dateAdapter.sameDatetime(this.oldValue, this._selected)) {
         this.selectedChanged.emit(date);
       }
+    } else if (this.withSeconds && !this._dateAdapter.sameSecond(this.oldValue, this._selected)) {
+      this.selectedChanged.emit(date);
     }
   }
 

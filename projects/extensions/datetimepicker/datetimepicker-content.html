@@ -22,6 +22,7 @@
     [multiYearSelector]="datetimepicker.multiYearSelector"
     [preventSameDateTimeSelection]="datetimepicker.preventSameDateTimeSelection"
     [headerComponent]="datetimepicker.calendarHeaderComponent"
+    [withSeconds]="datetimepicker.withSeconds"
     [timeInterval]="datetimepicker.timeInterval"
     [twelvehour]="datetimepicker.twelvehour"
     [showWeekNumbers]="datetimepicker.showWeekNumbers"
@@ -32,7 +33,7 @@
     (selectedChange)="datetimepicker._select($event)"
     (viewChanged)="datetimepicker._viewChanged($event)"
     (viewChanged)="_viewChanged($event)"
-    (_userSelection)="_handleUserSelection()"
+    (_userSelection)="_handleUserSelection()">
   ></mtx-calendar>
 
   <ng-template [cdkPortalOutlet]="_actionsPortal"></ng-template>

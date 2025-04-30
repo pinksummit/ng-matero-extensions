@@ -161,7 +161,7 @@ export class MtxMultiYearView<D> implements AfterContentInit {
   /** Handles when a new year is selected. */
   _yearSelected(year: number) {
     const month = this._adapter.getMonth(this.activeDate);
-    const normalizedDate = this._adapter.createDatetime(year, month, 1, 0, 0);
+    const normalizedDate = this._adapter.createDatetime(year, month, 1, 0, 0, 0);
 
     const dateObject = this._adapter.createDatetime(
       year,
@@ -171,7 +171,8 @@ export class MtxMultiYearView<D> implements AfterContentInit {
         this._adapter.getNumDaysInMonth(normalizedDate)
       ),
       this._adapter.getHour(this.activeDate),
-      this._adapter.getMinute(this.activeDate)
+      this._adapter.getMinute(this.activeDate),
+      this._adapter.getSecond(this.activeDate)
     );
 
     this.selectedChange.emit(dateObject);

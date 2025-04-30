@@ -19,6 +19,7 @@ $landscape-calendar-header-width: 144px;
 
 $_tokens: tokens-mtx-datetimepicker.$prefix, tokens-mtx-datetimepicker.get-token-slots();
 
+$landscape-calendar-header-with-seconds-width: calc(#{$landscape-calendar-header-width} + 12px);
 @mixin landscape-calendar-header {
   .mtx-calendar {
     display: flex;
@@ -26,6 +27,12 @@ $_tokens: tokens-mtx-datetimepicker.$prefix, tokens-mtx-datetimepicker.get-token
     .mtx-calendar-header {
       width: $landscape-calendar-header-width;
       min-width: $landscape-calendar-header-width;
+
+      &.mtx-calendar-header-with-seconds {
+        width:$landscape-calendar-header-with-seconds-width;
+        min-width: $landscape-calendar-header-with-seconds-width;
+      }
+
       padding: 16px 8px;
       border-bottom-width: 0;
 
@@ -67,6 +74,7 @@ $_tokens: tokens-mtx-datetimepicker.$prefix, tokens-mtx-datetimepicker.get-token
 
       .mtx-calendar-header-hours,
       .mtx-calendar-header-minutes,
+      .mtx-calendar-header-seconds,
       .mtx-calendar-header-ampm {
         width: 40px;
         text-align: center;
@@ -155,6 +163,7 @@ $_tokens: tokens-mtx-datetimepicker.$prefix, tokens-mtx-datetimepicker.get-token
   .mtx-calendar-header-date,
   .mtx-calendar-header-hours,
   .mtx-calendar-header-minutes,
+  .mtx-calendar-header-seconds,
   .mtx-calendar-header-ampm {
     height: auto;
     min-width: auto;
@@ -166,7 +175,7 @@ $_tokens: tokens-mtx-datetimepicker.$prefix, tokens-mtx-datetimepicker.get-token
     font-weight: inherit;
     letter-spacing: normal;
     white-space: normal;
-    word-break: break-word;
+    word-break: break-all;
 
     .mat-mdc-button-touch-target {
       height: 100%;
@@ -187,6 +196,7 @@ $_tokens: tokens-mtx-datetimepicker.$prefix, tokens-mtx-datetimepicker.get-token
 .mtx-calendar-header-date,
 .mtx-calendar-header-hours,
 .mtx-calendar-header-minutes,
+.mtx-calendar-header-seconds,
 .mtx-calendar-header-ampm {
   &:not(.active) {
     opacity: .6;
@@ -205,6 +215,7 @@ $_tokens: tokens-mtx-datetimepicker.$prefix, tokens-mtx-datetimepicker.get-token
 
     .mtx-calendar-header-hours,
     .mtx-calendar-header-minutes,
+    .mtx-calendar-header-seconds,
     .mtx-calendar-header-ampm {
       opacity: 1;
     }
@@ -248,7 +259,8 @@ $_tokens: tokens-mtx-datetimepicker.$prefix, tokens-mtx-datetimepicker.get-token
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0 $calendar-controls-side-margin;
+  margin-left: $calendar-controls-side-margin;
+  margin-right: $calendar-controls-side-margin;
 
   .mat-icon-button:hover .mat-button-focus-overlay {
     opacity: .04;

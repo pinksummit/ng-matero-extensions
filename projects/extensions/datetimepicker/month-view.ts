@@ -151,8 +151,10 @@ export class MtxMonthView<D> implements AfterContentInit {
       this._adapter.getMonth(this.activeDate),
       date,
       this._adapter.getHour(this.activeDate),
-      this._adapter.getMinute(this.activeDate)
+      this._adapter.getMinute(this.activeDate),
+      this._adapter.getSecond(this.activeDate)
     );
+
     this.selectedChange.emit(dateObject);
     this._activeDate = dateObject;
 
@@ -171,7 +173,8 @@ export class MtxMonthView<D> implements AfterContentInit {
       this._adapter.getMonth(this.activeDate),
       1,
       this._adapter.getHour(this.activeDate),
-      this._adapter.getMinute(this.activeDate)
+      this._adapter.getMinute(this.activeDate),
+      this._adapter.getSecond(this.activeDate)
     );
     this._firstWeekOffset =
       (DAYS_PER_WEEK +
@@ -211,7 +214,8 @@ export class MtxMonthView<D> implements AfterContentInit {
         this._adapter.getMonth(this.activeDate),
         i + 1,
         this._adapter.getHour(this.activeDate),
-        this._adapter.getMinute(this.activeDate)
+        this._adapter.getMinute(this.activeDate),
+        this._adapter.getSecond(this.activeDate)
       );
 
       if (this.showWeekNumbers && (cell === 0 || i === 0)) {

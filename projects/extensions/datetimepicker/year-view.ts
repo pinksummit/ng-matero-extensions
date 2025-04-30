@@ -135,6 +135,7 @@ export class MtxYearView<D> implements AfterContentInit {
       month,
       1,
       0,
+      0,
       0
     );
 
@@ -146,7 +147,8 @@ export class MtxYearView<D> implements AfterContentInit {
         this._adapter.getNumDaysInMonth(normalizedDate)
       ),
       this._adapter.getHour(this.activeDate),
-      this._adapter.getMinute(this.activeDate)
+      this._adapter.getMinute(this.activeDate),
+      this._adapter.getSecond(this.activeDate)
     );
 
     this.selectedChange.emit(dateObject);
@@ -190,7 +192,8 @@ export class MtxYearView<D> implements AfterContentInit {
         month,
         1,
         this._adapter.getHour(this.activeDate),
-        this._adapter.getMinute(this.activeDate)
+        this._adapter.getMinute(this.activeDate),
+        this._adapter.getSecond(this.activeDate)
       ),
       this._dateFormats.display.monthYearA11yLabel
     );
@@ -213,7 +216,8 @@ export class MtxYearView<D> implements AfterContentInit {
       month,
       1,
       this._adapter.getHour(this.activeDate),
-      this._adapter.getMinute(this.activeDate)
+      this._adapter.getMinute(this.activeDate),
+      this._adapter.getSecond(this.activeDate)
     );
 
     // If any date in the month is enabled count the month as enabled.

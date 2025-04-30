@@ -135,6 +135,11 @@ export class MtxDatetimepickerInput<D>
     });
   }
 
+  /** Includes the option to enter seconds. */
+  private get _withSeconds() {
+    return this._datetimepicker.withSeconds;
+  }
+
   /** The datetimepicker that this input is associated with. */
   @Input()
   set mtxDatetimepicker(value: MtxDatetimepicker<D>) {
@@ -286,7 +291,7 @@ export class MtxDatetimepickerInput<D>
   }
 
   _onInput(value: string) {
-    let date = this._dateAdapter.parse(value, this.getParseFormat());
+    let date = this_dateAdapter.parse(value, this.getParseFormat());
     this._lastValueValid = !date || this._dateAdapter.isValid(date);
     date = this._dateAdapter.getValidDateOrNull(date);
     this._value = date;
@@ -320,10 +325,32 @@ export class MtxDatetimepickerInput<D>
     switch (this._datetimepicker.type) {
       case 'date':
         return this._dateFormats.display.dateInput;
-      case 'datetime':
+      case 'datetime': {
+        if (this._withSeconds) {
+          const format = this._dateFormats.display.datetimeWithSecondsInput;
+          if (!format) {
+            console.warn(
+              "The display format 'datetimeWithSecondsInput' is not filled, the format from 'datetimeInput' will be used instead"
+            );
+          } else {
+            return format;
+          }
+        }
         return this._dateFormats.display.datetimeInput;
-      case 'time':
+      }
+      case 'time': {
+        if (this._withSeconds) {
+          const format = this._dateFormats.display.timeWithSecondsInput;
+          if (!format) {
+            console.warn(
+              "The display format 'timeWithSecondsInput' is not filled, the format from 'timeInput' will be used instead"
+            );
+          } else {
+            return format;
+          }
+        }
         return this._dateFormats.display.timeInput;
+      }
       case 'month':
         return this._dateFormats.display.monthInput;
       case 'year':
@@ -339,10 +366,35 @@ export class MtxDatetimepickerInput<D>
         parseFormat = this._dateFormats.parse.dateInput;
         break;
       case 'datetime':
-        parseFormat = this._dateFormats.parse.datetimeInput;
+        {
+          if (this._withSeconds) {
+            const tmpParseFormat = this._dateFormats.parse.datetimeWithSecondsInput;
+            if (!tmpParseFormat) {
+              console.warn(
+                "The display parse format 'datetimeWithSecondsInput' is not filled, the parse format from 'datetimeInput' will be used instead"
+              );
+            } else {
+              parseFormat = tmpParseFormat;
+            }
+          }
+          parseFormat = this._dateFormats.parse.datetimeInput;
+        }
         break;
       case 'time':
-        parseFormat = this._dateFormats.parse.timeInput;
+        {
+          if (this._withSeconds) {
+            const tmpParseFormat = this._dateFormats.parse.timeWithSecondsInput;
+            if (!tmpParseFormat) {
+              console.warn(
+                "The display parse format 'timeWithSecondsInput' is not filled, the parse format from 'timeInput' will be used instead"
+              );
+            } else {
+              parseFormat = tmpParseFormat;
+            }
+          } else {
+            parseFormat = this._dateFormats.parse.timeInput;
+          }
+        }
         break;
       case 'month':
         parseFormat = this._dateFormats.parse.monthInput;

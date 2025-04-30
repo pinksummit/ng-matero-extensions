@@ -8,6 +8,8 @@ export abstract class DatetimeAdapter<D> extends DateAdapter<D> {
 
   abstract getMinute(date: D): number;
 
+  abstract getSecond(date: D): number;
+
   abstract getFirstDateOfMonth(date: D): D;
 
   abstract getWeek(date: D, firstDayOfWeek: number): number;
@@ -18,27 +20,38 @@ export abstract class DatetimeAdapter<D> extends DateAdapter<D> {
 
   abstract getMinuteNames(): string[];
 
+  abstract getSecondsNames(): string[];
+
   abstract addCalendarHours(date: D, months: number): D;
 
   abstract addCalendarMinutes(date: D, minutes: number): D;
+
+  abstract addCalendarSeconds(date: D, seconds: number): D;
 
   abstract createDatetime(
     year: number,
     month: number,
     date: number,
     hour: number,
-    minute: number
+    minute: number,
+    seconds: number
   ): D;
 
   getValidDateOrNull(obj: any): D | null {
     return this.isDateInstance(obj) && this.isValid(obj) ? obj : null;
   }
 
-  compareDatetime(first: D, second: D, respectMinutePart: boolean = true): number | boolean {
+  compareDatetime(
+    first: D,
+    second: D,
+    respectMinutePart: boolean = true,
+    respectSecondPart: boolean = true
+  ): number | boolean {
     return (
       this.compareDate(first, second) ||
       this.getHour(first) - this.getHour(second) ||
-      (respectMinutePart && this.getMinute(first) - this.getMinute(second))
+      (respectMinutePart && this.getMinute(first) - this.getMinute(second)) ||
+      (respectSecondPart && this.getSecond(first) - this.getSecond(second))
     );
   }
 
@@ -79,6 +92,15 @@ export abstract class DatetimeAdapter<D> extends DateAdapter<D> {
       second &&
       this.getMinute(first) === this.getMinute(second) &&
       this.sameHour(first, second)
+    );
+  }
+
+  sameSecond(first: D | null, second: D | null) {
+    return (
+      first &&
+      second &&
+      this.getSecond(first) === this.getSecond(second) &&
+      this.sameMinute(first, second)
     );
   }
 
