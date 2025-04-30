@@ -1,0 +1,36 @@
+{
+  "name": "@ng-matero/extensions-date-fns-adapter",
+  "version": "19.1.0",
+  "description": "Angular Material Extensions date-fns Adapter",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Jelle Bruisten <jelle_bruisten@hotmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ng-matero/extensions.git"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/core": ">=19.0.0",
+    "@angular/material": ">=19.0.0",
+    "@angular/material-date-fns-adapter": ">=19.0.0",
+    "@ng-matero/extensions": ">=19.0.0",
+    "date-fns": ">2.20.0 <5.0"
+  },
+  "dependencies": {
+    "tslib": "^2.4.0"
+  },
+  "sideEffects": false,
+  "module": "fesm2022/extensions-date-fns-adapter.mjs",
+  "typings": "index.d.ts",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./fesm2022/extensions-date-fns-adapter.mjs"
+    }
+  }
+}

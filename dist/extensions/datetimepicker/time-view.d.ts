@@ -1,0 +1,154 @@
+import { NumberInput } from '@angular/cdk/coercion';
+import { TemplatePortal } from '@angular/cdk/portal';
+import { ElementRef, EventEmitter, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { SubscriptionLike } from 'rxjs';
+import { MtxClockView } from './clock';
+import { MtxDatetimepickerFilterType } from './datetimepicker-filtertype';
+import { MtxDatetimepickerIntl } from './datetimepicker-intl';
+import { MtxAMPM } from './datetimepicker-types';
+import * as i0 from "@angular/core";
+export declare class MtxTimeInput implements OnDestroy {
+    private element;
+    private cdr;
+    set timeInterval(value: NumberInput);
+    private _interval;
+    set timeMin(value: NumberInput);
+    private _min;
+    set timeMax(value: NumberInput);
+    private _max;
+    set timeValue(value: NumberInput);
+    timeValueChanged: EventEmitter<NumberInput>;
+    private _value;
+    private keyDownListener;
+    private keyPressListener;
+    private inputEventListener;
+    /** Inserted by Angular inject() migration for backwards compatibility */
+    constructor(...args: unknown[]);
+    get hasFocus(): any;
+    get inputElement(): HTMLInputElement;
+    get valid(): boolean;
+    get invalid(): boolean;
+    blur(): void;
+    focus(): void;
+    /**
+     * Write value to inputElement
+     * @param value NumberInput
+     */
+    writeValue(value: NumberInput): void;
+    /**
+     * Writes value to placeholder
+     * @param value NumberInput
+     */
+    writePlaceholder(value: NumberInput): void;
+    keyDownHandler(event: KeyboardEvent): void;
+    /**
+     * Prevent non number inputs in the inputElement with the exception of Enter/BackSpace
+     * @param event KeyboardEvent
+     */
+    keyPressHandler(event: KeyboardEvent): void;
+    inputChangedHandler(): void;
+    clampInputValue(): void;
+    /**
+     * Remove event listeners on destruction
+     */
+    ngOnDestroy(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<MtxTimeInput, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<MtxTimeInput, "input.mtx-time-input", ["mtxTimeInput"], { "timeInterval": { "alias": "timeInterval"; "required": false; }; "timeMin": { "alias": "timeMin"; "required": false; }; "timeMax": { "alias": "timeMax"; "required": false; }; "timeValue": { "alias": "timeValue"; "required": false; }; }, { "timeValueChanged": "timeValueChanged"; }, never, never, true, never>;
+}
+export declare class MtxTimeView<D> implements OnChanges, OnDestroy {
+    private _adapter;
+    private _changeDetectorRef;
+    private _elementRef;
+    protected _datetimepickerIntl: MtxDatetimepickerIntl;
+    /** Emits when the currently selected date changes. */
+    readonly selectedChange: EventEmitter<D>;
+    /** Emits when any date changes. */
+    readonly activeDateChange: EventEmitter<D>;
+    /** Emits when any date is selected. */
+    readonly _userSelection: EventEmitter<void>;
+    /** Emits when AM/PM button are clicked. */
+    readonly ampmChange: EventEmitter<MtxAMPM>;
+    /** Emits when AM/PM button are clicked. */
+    readonly clockViewChange: EventEmitter<MtxClockView>;
+    /** A function used to filter which dates are selectable. */
+    dateFilter: (date: D, type: MtxDatetimepickerFilterType) => boolean;
+    /** Input for action buttons. */
+    timeInput: boolean;
+    /** Step over minutes. */
+    interval: number;
+    /** Input for action buttons. */
+    actionsPortal: TemplatePortal | null;
+    /** Prevent user to select same date time */
+    preventSameDateTimeSelection: boolean;
+    /** Whether the time input should be auto-focused after view init. */
+    autoFocus: boolean;
+    /** Includes the option to enter seconds. */
+    withSeconds: boolean;
+    protected hourInputElement: ElementRef<HTMLInputElement> | undefined;
+    set hourInputDirective(input: MtxTimeInput);
+    protected _hourInputDirective: MtxTimeInput | undefined;
+    protected minuteInputElement: ElementRef<HTMLInputElement> | undefined;
+    set minuteInputDirective(input: MtxTimeInput);
+    protected _minuteInputDirective: MtxTimeInput | undefined;
+    protected secondInputElement: ElementRef<HTMLInputElement> | undefined;
+    protected secondInputDirective: MtxTimeInput | undefined;
+    datetimepickerIntlChangesSubscription: SubscriptionLike;
+    /** Whether the clock uses 12 hour format. */
+    twelvehour: boolean;
+    /** Whether the time is now in AM or PM. */
+    AMPM: MtxAMPM;
+    /** The date to display in this clock view. */
+    get activeDate(): D;
+    set activeDate(value: D);
+    private _activeDate;
+    /** The currently selected date. */
+    get selected(): D | null;
+    set selected(value: D | null);
+    private _selected;
+    /** The minimum selectable date. */
+    get minDate(): D | null;
+    set minDate(value: D | null);
+    private _minDate;
+    /** The maximum selectable date. */
+    get maxDate(): D | null;
+    set maxDate(value: D | null);
+    private _maxDate;
+    /** Whether the clock should be started in hour or minute view. */
+    get clockView(): MtxClockView;
+    set clockView(value: MtxClockView);
+    /** Whether the clock is in hour view. */
+    private _clockView;
+    get isHourView(): boolean;
+    get isMinuteView(): boolean;
+    get isSecondView(): boolean;
+    get hour(): string;
+    get minute(): string;
+    get second(): string;
+    prefixWithZero(value: number): string;
+    /** Inserted by Angular inject() migration for backwards compatibility */
+    constructor(...args: unknown[]);
+    ngOnChanges(changes: SimpleChanges): void;
+    ngOnDestroy(): void;
+    /** Handles keydown events on the calendar body when calendar is in clock view. */
+    _handleCalendarBodyKeydown(event: KeyboardEvent): void;
+    _focusInputElement(): void;
+    _handleHourInputChange(value: NumberInput): void;
+    _updateHourForAmPm(value: number): number;
+    _handleMinuteInputChange(value: NumberInput): void;
+    _handleSecondInputChange(value: NumberInput): void;
+    _handleFocus(clockView: MtxClockView): void;
+    _dialTimeSelected(date: D): void;
+    _timeSelected(date: D): void;
+    _onActiveDateChange(date: D): void;
+    _handleSelection(): void;
+    _handleOk(): void;
+    _handleCancel(): void;
+    /** Focuses the active cell after the microtask queue is empty. */
+    _focusActiveCell(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<MtxTimeView<any>, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<MtxTimeView<any>, "mtx-time-view", ["mtxTime"], { "dateFilter": { "alias": "dateFilter"; "required": false; }; "timeInput": { "alias": "timeInput"; "required": false; }; "interval": { "alias": "interval"; "required": false; }; "actionsPortal": { "alias": "actionsPortal"; "required": false; }; "preventSameDateTimeSelection": { "alias": "preventSameDateTimeSelection"; "required": false; }; "autoFocus": { "alias": "autoFocus"; "required": false; }; "withSeconds": { "alias": "withSeconds"; "required": false; }; "twelvehour": { "alias": "twelvehour"; "required": false; }; "AMPM": { "alias": "AMPM"; "required": false; }; "activeDate": { "alias": "activeDate"; "required": false; }; "selected": { "alias": "selected"; "required": false; }; "minDate": { "alias": "minDate"; "required": false; }; "maxDate": { "alias": "maxDate"; "required": false; }; "clockView": { "alias": "clockView"; "required": false; }; }, { "selectedChange": "selectedChange"; "activeDateChange": "activeDateChange"; "_userSelection": "_userSelection"; "ampmChange": "ampmChange"; "clockViewChange": "clockViewChange"; }, never, never, true, never>;
+    static ngAcceptInputType_timeInput: unknown;
+    static ngAcceptInputType_preventSameDateTimeSelection: unknown;
+    static ngAcceptInputType_autoFocus: unknown;
+    static ngAcceptInputType_twelvehour: unknown;
+}
