@@ -1,0 +1,157 @@
+{
+  "name": "@ng-matero/extensions",
+  "version": "19.3.3",
+  "description": "Angular Material Extensions",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "nzbin<nzb329@163.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ng-matero/extensions.git"
+  },
+  "keywords": [
+    "angular",
+    "angular-material",
+    "angular-components",
+    "angular-material-extensions",
+    "ng-matero",
+    "data-grid",
+    "ngx-data-grid",
+    "material-data-table",
+    "color-picker",
+    "ngx-color",
+    "ngx-color-picker",
+    "ng-select",
+    "typeahead",
+    "autocomplete",
+    "checkbox-group",
+    "popover",
+    "datetimepicker"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ng-matero/extensions/issues"
+  },
+  "homepage": "https://ng-matero.github.io/extensions/",
+  "exports": {
+    ".": {
+      "sass": "./_index.scss",
+      "types": "./index.d.ts",
+      "default": "./fesm2022/ng-matero-extensions.mjs"
+    },
+    "./prebuilt-themes/indigo-pink.css": {
+      "style": "./prebuilt-themes/indigo-pink.css"
+    },
+    "./prebuilt-themes/deeppurple-amber.css": {
+      "style": "./prebuilt-themes/deeppurple-amber.css"
+    },
+    "./prebuilt-themes/pink-bluegrey.css": {
+      "style": "./prebuilt-themes/pink-bluegrey.css"
+    },
+    "./prebuilt-themes/purple-green.css": {
+      "style": "./prebuilt-themes/purple-green.css"
+    },
+    "./prebuilt-themes/azure-blue.css": {
+      "style": "./prebuilt-themes/azure-blue.css"
+    },
+    "./prebuilt-themes/rose-red.css": {
+      "style": "./prebuilt-themes/rose-red.css"
+    },
+    "./prebuilt-themes/cyan-orange.css": {
+      "style": "./prebuilt-themes/cyan-orange.css"
+    },
+    "./prebuilt-themes/magenta-violet.css": {
+      "style": "./prebuilt-themes/magenta-violet.css"
+    },
+    "./prebuilt-themes/*": {
+      "style": "./prebuilt-themes/*.css"
+    },
+    "./package.json": {
+      "default": "./package.json"
+    },
+    "./alert": {
+      "types": "./alert/index.d.ts",
+      "default": "./fesm2022/mtxAlert.mjs"
+    },
+    "./checkbox-group": {
+      "types": "./checkbox-group/index.d.ts",
+      "default": "./fesm2022/mtxCheckboxGroup.mjs"
+    },
+    "./button": {
+      "types": "./button/index.d.ts",
+      "default": "./fesm2022/mtxButton.mjs"
+    },
+    "./colorpicker": {
+      "types": "./colorpicker/index.d.ts",
+      "default": "./fesm2022/mtxColorpicker.mjs"
+    },
+    "./dialog": {
+      "types": "./dialog/index.d.ts",
+      "default": "./fesm2022/mtxDialog.mjs"
+    },
+    "./drawer": {
+      "types": "./drawer/index.d.ts",
+      "default": "./fesm2022/mtxDrawer.mjs"
+    },
+    "./core": {
+      "types": "./core/index.d.ts",
+      "default": "./fesm2022/mtxCore.mjs"
+    },
+    "./datetimepicker": {
+      "types": "./datetimepicker/index.d.ts",
+      "default": "./fesm2022/mtxDatetimepicker.mjs"
+    },
+    "./column-resize": {
+      "types": "./column-resize/index.d.ts",
+      "default": "./fesm2022/mtxColumnResize.mjs"
+    },
+    "./photoviewer": {
+      "types": "./photoviewer/index.d.ts",
+      "default": "./fesm2022/mtxPhotoviewer.mjs"
+    },
+    "./grid": {
+      "types": "./grid/index.d.ts",
+      "default": "./fesm2022/mtxGrid.mjs"
+    },
+    "./loader": {
+      "types": "./loader/index.d.ts",
+      "default": "./fesm2022/mtxLoader.mjs"
+    },
+    "./popover": {
+      "types": "./popover/index.d.ts",
+      "default": "./fesm2022/mtxPopover.mjs"
+    },
+    "./progress": {
+      "types": "./progress/index.d.ts",
+      "default": "./fesm2022/mtxProgress.mjs"
+    },
+    "./select": {
+      "types": "./select/index.d.ts",
+      "default": "./fesm2022/mtxSelect.mjs"
+    },
+    "./split": {
+      "types": "./split/index.d.ts",
+      "default": "./fesm2022/mtxSplit.mjs"
+    },
+    "./tooltip": {
+      "types": "./tooltip/index.d.ts",
+      "default": "./fesm2022/mtxTooltip.mjs"
+    }
+  },
+  "dependencies": {
+    "@ng-select/ng-select": "^14.2.0",
+    "ngx-color": "^10.0.0",
+    "photoviewer": "^3.10.0",
+    "tslib": "^2.4.0"
+  },
+  "peerDependencies": {
+    "@angular/cdk": ">=19.0.0",
+    "@angular/common": ">=19.0.0",
+    "@angular/core": ">=19.0.0",
+    "@angular/material": ">=19.0.0"
+  },
+  "sideEffects": false,
+  "module": "fesm2022/ng-matero-extensions.mjs",
+  "typings": "index.d.ts"
+}
