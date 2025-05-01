@@ -31,7 +31,8 @@
     "publish:moment-adapter": "npm run build:moment-adapter && cd dist/extensions-moment-adapter && npm publish",
     "publish:luxon-adapter": "npm run build:luxon-adapter && cd dist/extensions-luxon-adapter && npm publish",
     "publish:date-fns-adapter": "npm run build:date-fns-adapter && cd dist/extensions-date-fns-adapter && npm publish",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "postinstall": "yarn build:lib && yarn build:moment-adapter"
   },
   "private": true,
   "dependencies": {
