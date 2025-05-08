@@ -376,8 +376,9 @@ export class MtxDatetimepickerInput<D>
             } else {
               parseFormat = tmpParseFormat;
             }
+          } else {
+            parseFormat = this._dateFormats.parse.datetimeInput;
           }
-          parseFormat = this._dateFormats.parse.datetimeInput;
         }
         break;
       case 'time':
